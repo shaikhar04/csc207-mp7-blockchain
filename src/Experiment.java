@@ -1,7 +1,5 @@
-import java.lang.reflect.Array;
-import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
+
 
 public class Experiment {
     public static void main(String[] args) throws NoSuchAlgorithmException {

@@ -1,19 +1,30 @@
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+/**
+ * Wrapper class for a byte array to store a hash value.
+ *
+ * @author Arsal Shaikh
+ * @author Vincent Yao
+ */
+
 public class Hash {
     
+    // -- Fields --
     byte[] hashValue;
 
+
+    // -- Constructor --
     public Hash(byte[] data) throws NoSuchAlgorithmException{
-        MessageDigest md = MessageDigest.getInstance("sha-256");
-        md.update(data);
-        this.hashValue = md.digest();
-    }
+        this.hashValue = data;
+    } // Hash(byte[])
+
+    
+    // -- Methods --
     public byte[] getData() {
         return this.hashValue;
-    }
+    } // getData()
+    
     public boolean isValid() {
         for (int i = 0; i < 3; i++) {
             if (this.hashValue[i] != (byte) 0) {
@@ -21,14 +32,18 @@ public class Hash {
             }
         }
         return true;
-    }
+    } // isValid()
+    
+    @Override
     public String toString()  {
         String output = "";
         for (byte b : hashValue) {
             output += String.format("%02x", Byte.toUnsignedInt(b));
         }
         return output;
-    }
+    } // toString()
+    
+    @Override
     public boolean equals(Object other) {
         if (other instanceof Hash) {
             Hash o = (Hash) other;
