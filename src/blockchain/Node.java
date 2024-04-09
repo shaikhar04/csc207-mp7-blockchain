@@ -1,3 +1,4 @@
+package blockchain;
 
 class Node {
     Block block;

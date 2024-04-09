@@ -1,3 +1,4 @@
+package blockchain;
 
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
@@ -5,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 public class BlockChain {
 
     private Node first;
-    private Node last;
+    public Node last;
     private int size;
 
 
