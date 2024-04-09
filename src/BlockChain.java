@@ -15,12 +15,15 @@ public class BlockChain {
     }
 
     // Mines and returns a new block to be added to the chain
-    public Block mine(int amount){
-
+    public Block mine(int amount) throws NoSuchAlgorithmException {
+        int newNum = this.last.block.getNum() + 1;
+        Hash prevHash = this.last.block.prevHash;
+        Block minedBlock = new Block(newNum, amount, prevHash);
+        return minedBlock;
     }
 
     // Returns the size of the blockchain
-    public int getSize(){
+    public int getSize() {
         return this.size;
     }
 
@@ -44,9 +47,9 @@ public class BlockChain {
             throw new IllegalArgumentException();
         } // try catch
         
-        Node n = new Node(blk);
-        this.last.next = n;
-        this.last = n;
+        Node newLast = new Node(blk);
+        this.last.next = newLast;
+        this.last = newLast;
         this.size++;
 
         // Verify appended blockchain is valid
@@ -104,6 +107,14 @@ public class BlockChain {
 
     // Returns a string representation of the blockchain
     public String toString() {
+        String output = this.first.block.toString();
         
+        Node walker = this.first;
+        while (!walker.equals(this.last)) {
+            walker = walker.next;
+            output += walker.block.toString();
+        }
+
+        return output;
     } // toString()
 }
