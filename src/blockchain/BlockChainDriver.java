@@ -33,7 +33,7 @@ public class BlockChainDriver {
         }
         
         // Initialise BlockChain
-        initalAmount = Integer.valueOf(args[0]);
+        initalAmount = Integer.valueOf(100);
         BlockChain blockChain = new BlockChain(initalAmount);
 
         PrintWriter pen = new PrintWriter(System.out, true);
