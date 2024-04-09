@@ -1,3 +1,4 @@
+
 class Node {
     Block block;
     Node next;

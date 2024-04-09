@@ -36,7 +36,7 @@ public class Block {
         this.nonce = nonce;
         this.hash = new Hash(hash(this, this.nonce));
     }
-    
+
 
     // +---------+-----------------------------------------------------
     // | Methods |
@@ -82,7 +82,7 @@ public class Block {
         return nonce;
     } // mineNonce(Block)
 
-    private byte[] hash(Block block, long nonce) throws NoSuchAlgorithmException {
+    public static byte[] hash(Block block, long nonce) throws NoSuchAlgorithmException {
         byte[] numBytes = ByteBuffer.allocate(Integer.BYTES).putInt(block.num).array();
         byte[] amountBytes = ByteBuffer.allocate(Integer.BYTES).putInt(block.amount).array();
         byte[] longBytes = ByteBuffer.allocate(Long.BYTES).putLong(block.nonce).array();
