@@ -86,6 +86,36 @@ public class BlockChain {
     // Checks the validity of the entire blockchain
     public boolean isValidBlockChain() {
 
+    int alexBalance = this.first.block.getAmount();
+    int blakeBalance = 0;
+    
+    // Traverse the chain
+    Node walker = this.first;
+    Node behindWalker;
+    while (!walker.equals(this.last)) {
+        behindWalker = walker;
+        walker = walker.next;
+        alexBalance += walker.block.getAmount();
+        blakeBalance -= walker.block.getAmount();
+
+        if (alexBalance < 0 || blakeBalance < 0) {
+            return false;
+        }
+        // Validate prev hash
+        if (!behindWalker.block.getHash().isValid()) {
+            return false;
+        }
+        // Validate prevHash connects to its predecessor
+        if (behindWalker.block.getHash() != walker.block.getPrevHash()) {
+            return false;
+        }
+    }
+    // Validate hash of last block
+    if (this.last.block.getHash().isValid()) {
+        return false;
+    }
+
+    return true;
     } // isValidBlockChain()
 
     // Prints the balances of Alexis and Blake
