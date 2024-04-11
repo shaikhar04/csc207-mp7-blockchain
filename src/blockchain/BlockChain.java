@@ -135,7 +135,7 @@ public class BlockChain {
             blakeBalance -= walker.block.getAmount();
         } // while
 
-        pen.printf("Alex: %i, Blake: %i\n", alexBalance, blakeBalance);
+        pen.printf("Alex: %d, Blake: %d\n", alexBalance, blakeBalance);
         pen.flush();
     } // printBalances(PrintWriter)
 

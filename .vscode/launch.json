@@ -4,14 +4,21 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
-        
+        {
+            "type": "java",
+            "name": "BlockChainDriver",
+            "request": "launch",
+            "mainClass": "blockchain.BlockChainDriver",
+            "projectName": "csc207-mp7-blockchain_dd80171e"
+        },
         {
             "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}",
-            "args": ["100"]
+            "args": [
+                "100"
+            ]
         },
         {
             "type": "java",

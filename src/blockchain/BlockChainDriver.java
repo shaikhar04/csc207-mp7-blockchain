@@ -39,7 +39,11 @@ public class BlockChainDriver {
         }
         
         // Initialise BlockChain
-        initalAmount = Integer.valueOf(100);
+        initalAmount = Integer.valueOf(args[0]);
+        if (initalAmount < 0) {
+            System.err.println("Amount entered must be a positive Integer.");
+            System.exit(1);
+        }//I am not sure if this is necessary but I added it just in case
         BlockChain blockChain = new BlockChain(initalAmount);
 
         PrintWriter pen = new PrintWriter(System.out, true);
@@ -53,9 +57,8 @@ public class BlockChainDriver {
             pen.printf("Command? ");
             pen.flush();
             String input = eyes.nextLine().trim();
-
-
             if (input.equalsIgnoreCase("mine")){
+                executedCommand = true;
                 int amount;
                 pen.printf("Amount transferred? ");
                 amount = Integer.valueOf(eyes.nextLine().trim()) ;
@@ -66,6 +69,7 @@ public class BlockChainDriver {
             
 
             if(input.equalsIgnoreCase("append")){
+                executedCommand = true;
                 int amount;
                 long nonce;
 
@@ -87,6 +91,7 @@ public class BlockChainDriver {
 
 
             if (input.equalsIgnoreCase("check")) {
+                executedCommand = true;
                 if (blockChain.isValidBlockChain()) {
                     pen.println("Chain is valid!\n");
                 } else {
@@ -96,11 +101,13 @@ public class BlockChainDriver {
 
 
             if (input.equalsIgnoreCase("report")) {
+                executedCommand = true;
                 blockChain.printBalances(pen);
             } // if input is 'report'
 
 
             if (input.equalsIgnoreCase("remove")) {
+                executedCommand = true;
                 if (blockChain.getSize() > 1) {
                     blockChain.removeLast();
                 } else {
@@ -110,12 +117,14 @@ public class BlockChainDriver {
 
 
             if (input.equalsIgnoreCase("help")) {
+                executedCommand = true;
                 pen.println(commandList);
             } // if input is 'help'
 
 
             // Exit condition
             if (input.equalsIgnoreCase("quit")) {
+                executedCommand = true;
                 pen.close();
                 eyes.close();
                 return;
