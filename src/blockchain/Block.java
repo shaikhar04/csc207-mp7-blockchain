@@ -29,14 +29,14 @@ public class Block {
         this.amount = amount;
         this.prevHash = prevHash;
         this.nonce = mineNonce(this);
-        this.hash = new Hash(hash(this, this.nonce));
+        this.hash = new Hash(this.computeHash(this.nonce));
     }
     public Block(int num, int amount, Hash prevHash, long nonce) throws NoSuchAlgorithmException {
         this.num = num;
         this.amount = amount;
         this.prevHash = prevHash;
         this.nonce = nonce;
-        this.hash = new Hash(hash(this, this.nonce));
+        this.hash = new Hash(this.computeHash(this.nonce));
     }
 
 
@@ -76,24 +76,57 @@ public class Block {
     
     private long mineNonce(Block block) throws NoSuchAlgorithmException {    
         long nonce = 0;
-        Hash blockHash = new Hash(hash(block, nonce));
+        Hash blockHash = new Hash(block.computeHash(nonce));
         while (!blockHash.isValid()) {
+            System.out.println("Mining..." + nonce);
             nonce++;
-            blockHash = new Hash(hash(block, nonce));
+            blockHash = new Hash(this.computeHash(nonce));
+          //  
         }
+        System.out.println("nonce:" + nonce);
         return nonce;
     } // mineNonce(Block)
 
-    public static byte[] hash(Block block, long nonce) throws NoSuchAlgorithmException {
-        byte[] numBytes = ByteBuffer.allocate(Integer.BYTES).putInt(block.num).array();
-        byte[] amountBytes = ByteBuffer.allocate(Integer.BYTES).putInt(block.amount).array();
-        byte[] longBytes = ByteBuffer.allocate(Long.BYTES).putLong(block.nonce).array();
+    // public static byte[] hash(Block block, long nonce) throws NoSuchAlgorithmException {
+    //     byte[] numBytes = ByteBuffer.allocate(Integer.BYTES).putInt(block.num).array();
+    //     byte[] amountBytes = ByteBuffer.allocate(Integer.BYTES).putInt(block.amount).array();
+    //     byte[] nonceBytes = ByteBuffer.allocate(Long.BYTES).putLong(block.nonce).array();
         
-        MessageDigest md = MessageDigest.getInstance("sha-256");
-        md.update(numBytes);
-        md.update(amountBytes);
-        md.update(longBytes);
+    //     MessageDigest md = MessageDigest.getInstance("SHA-256");
+    //     md.update(numBytes);
+    //     md.update(amountBytes);
+    //     if (block.prevHash != null) {
+    //         md.update(block.prevHash.getData());
+    //     }
+    //     md.update(nonceBytes);
 
+    //     return md.digest();
+
+    public byte[] computeHash(long nonce) throws NoSuchAlgorithmException {
+        int num = this.num;
+        int amount = this.amount;
+        Hash prevHash = this.getPrevHash();
+        
+        
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        md.update(ByteBuffer.allocate(Integer.BYTES).putInt(num).array());
+        md.update(ByteBuffer.allocate(Integer.BYTES).putInt(amount).array());
+        if (prevHash != null) {
+            md.update(prevHash.getData());
+        }
+        md.update(ByteBuffer.allocate(Long.BYTES).putLong(nonce).array());
         return md.digest();
-    } // hash(Block, long)
+        }
+        
+        // private long mineNonce() throws NoSuchAlgorithmException {
+        //     long nonce = 0;
+        //     do{
+        //     nonce++;
+        //     hash = new Hash(this.computeHash(nonce));
+        //     System.out.println(nonce);
+        //     }while(!hash.isValid());
+
+        //     System.out.println("VALID HASH FOUND");
+        //     return nonce;
+        // }
 }

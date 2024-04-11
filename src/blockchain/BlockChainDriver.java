@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
+import java.util.Scanner;
 
 public class BlockChainDriver {
     public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
@@ -33,44 +34,48 @@ public class BlockChainDriver {
         }
         
         // Initialise BlockChain
-        initalAmount = Integer.valueOf(args[0]);
+        initalAmount = Integer.valueOf(100);
         BlockChain blockChain = new BlockChain(initalAmount);
 
         PrintWriter pen = new PrintWriter(System.out, true);
-        BufferedReader eyes = new BufferedReader(new InputStreamReader(System.in)); 
-        String input = eyes.readLine();
+        Scanner eyes = new Scanner(System.in); 
+        
+        
+        while(true){
+            pen.println(blockChain);
+            pen.flush();
+            pen.printf("Command? ");
+            String input = eyes.nextLine().trim();
 
-        while(input.equals("quit")){
-
-            if(input.equals("mine")){
+            if(input.equalsIgnoreCase("mine")){
                 int amount;
-                pen.print("Amount transferred? ");
-                amount = Integer.valueOf(eyes.readLine()) ;
+                pen.printf("Amount transferred? ");
+                amount = Integer.valueOf(eyes.nextLine().trim()) ;
                 Block minedBlock = blockChain.mine(amount);
-                pen.printf("amount = %s, nonce = %d",amount, minedBlock.getNonce());
+                pen.printf("amount = %s, nonce = %d\n",amount, minedBlock.getNonce());
             }//mine
             
-            if(input.equals("append")){
+            if(input.equalsIgnoreCase("append")){
                 int amount;
                 long nonce;
 
                 // Input amount
-                pen.print("Amount transferred? ");
+                pen.printf("Amount transferred? ");
                 pen.flush();
-                amount = Integer.valueOf(eyes.readLine());
+                amount = Integer.valueOf(eyes.nextLine().trim());
                 // Input nonce
-                pen.print("Nonce? ");
+                pen.printf("Nonce? ");
                 pen.flush();
-                nonce = Long.valueOf(eyes.readLine());
+                nonce = Long.valueOf(eyes.nextLine().trim());
 
                 int newNum = blockChain.last.block.getNum() + 1;
                 Hash prevHash = blockChain.last.block.getHash();
-                Block toAppend = new Block(newNum, amount, prevHash);
+                Block toAppend = new Block(newNum, amount, prevHash, nonce);
 
                 blockChain.append(toAppend);
             } // if
 
-            if (input.equals("check")) {
+            if (input.equalsIgnoreCase("check")) {
                 if (blockChain.isValidBlockChain()) {
                     pen.println("Chain is valid!\n");
                 } else {
@@ -78,20 +83,24 @@ public class BlockChainDriver {
                 }
             } // if check
 
-            if (input.equals("report")) {
+            if (input.equalsIgnoreCase("report")) {
                 blockChain.printBalances(pen);
             }
 
-            if (input.equals("remove")) {
+            if (input.equalsIgnoreCase("remove")) {
                 blockChain.removeLast();
             }
 
-            if (input.equals("help")) {
+            if (input.equalsIgnoreCase("help")) {
                 pen.println(commandList);
             }
 
-            // Prints all blocks
-            pen.println(blockChain.toString());
+            // Exit condition
+            if (input.equalsIgnoreCase("quit")) {
+                pen.close();
+                eyes.close();
+                break;
+            }
             }// while
     } // main(String[])
 
