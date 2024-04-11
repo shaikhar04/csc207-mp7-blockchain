@@ -21,7 +21,7 @@ public class BlockChain {
     // Mines and returns a new block to be added to the chain
     public Block mine(int amount) throws NoSuchAlgorithmException {
         int newNum = this.last.block.getNum() + 1;
-        Hash prevHash = this.last.block.prevHash;
+        Hash prevHash = this.last.block.getHash();
         Block minedBlock = new Block(newNum, amount, prevHash);
         return minedBlock;
     } // mine(int)
@@ -41,7 +41,7 @@ public class BlockChain {
         }
         // Validate prev hash
         if (this.last.block.hash != blk.prevHash) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Invalid previous hash field");
         }
         
         // Append the new node
@@ -53,7 +53,7 @@ public class BlockChain {
         // Verify appended blockchain is valid
         if (!this.isValidBlockChain()) {
             this.removeLast();
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Blockchain is invalid after appending");
         }
     } // append(Block)
 
@@ -86,35 +86,39 @@ public class BlockChain {
     // Checks the validity of the entire blockchain
     public boolean isValidBlockChain() {
 
-    int alexBalance = this.first.block.getAmount();
-    int blakeBalance = 0;
-    
-    // Traverse the chain
-    Node walker = this.first;
-    Node behindWalker;
-    while (!walker.equals(this.last)) {
-        behindWalker = walker;
-        walker = walker.next;
-        alexBalance += walker.block.getAmount();
-        blakeBalance -= walker.block.getAmount();
-        if (alexBalance < 0 || blakeBalance < 0) {
-            return false;
-        }
-        // Validate prev hash
-        if (!behindWalker.block.getHash().isValid()) {
-            return false;
-        }
-        // Validate prevHash connects to its predecessor
-        if (behindWalker.block.getHash() != walker.block.getPrevHash()) {
-            return false;
-        }
-    } // while
+        int alexBalance = this.first.block.getAmount();
+        int blakeBalance = 0;
+        
+        // Traverse the chain
+        Node walker = this.first;
+        Node behindWalker;
+        while (!walker.equals(this.last)) {
+            behindWalker = walker;
+            walker = walker.next;
+            alexBalance += walker.block.getAmount();
+            blakeBalance -= walker.block.getAmount();
+            if (alexBalance < 0 || blakeBalance < 0) {
+                System.out.println("Balance must be > 0"); // DEBUG STATEMENTS
+                return false;
+            }
+            // Validate prev hash
+            if (!behindWalker.block.getHash().isValid()) {
+                System.out.println("Hash for block number " + behindWalker.block.num + " is invalid."); // DEBUG STATEMENTS
+                return false;
+            }
+            // Validate prevHash connects to its predecessor
+            if (behindWalker.block.getHash() != walker.block.getPrevHash()) {
+                System.out.println("Hash for Block: " + behindWalker.block.num + " does not equal prevHash for Block " + walker.block.num); // DEBUG STATEMENTS
+                return false;
+            }
+        } // while
 
-    // Validate hash of last block
-    if (this.last.block.getHash().isValid()) {
-        return false;
-    }
-    return true;
+        // Validate hash of last block
+        if (!this.last.block.getHash().isValid()) {
+            System.out.println("Hash for last block is invalid"); // DEBUG STATEMENTS
+            return false;
+        }
+        return true;
     } // isValidBlockChain()
 
 
@@ -138,7 +142,7 @@ public class BlockChain {
 
     // Returns a string representation of the blockchain
     public String toString() {
-        String output = this.first.block.toString();
+        String output = this.first.block.toString() + "\n";
         // Traverse the chain
         Node walker = this.first;
         while (!walker.equals(this.last)) {

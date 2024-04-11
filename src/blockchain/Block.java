@@ -78,12 +78,11 @@ public class Block {
         long nonce = 0;
         Hash blockHash = new Hash(block.computeHash(nonce));
         while (!blockHash.isValid()) {
-            System.out.println("Mining..." + nonce);
             nonce++;
             blockHash = new Hash(this.computeHash(nonce));
-          //  
-        }
-        System.out.println("nonce:" + nonce);
+        } // while
+        
+
         return nonce;
     } // mineNonce(Block)
 

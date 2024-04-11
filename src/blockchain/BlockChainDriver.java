@@ -45,20 +45,23 @@ public class BlockChainDriver {
         PrintWriter pen = new PrintWriter(System.out, true);
         Scanner eyes = new Scanner(System.in); 
         
-        
+        // Command loop
+        boolean executedCommand;
         while (true) {
-            pen.println(blockChain);
+            executedCommand = false;
+            pen.printf("\n" + blockChain + "\n");
             pen.printf("Command? ");
             pen.flush();
             String input = eyes.nextLine().trim();
 
 
-            if(input.equalsIgnoreCase("mine")){
+            if (input.equalsIgnoreCase("mine")){
                 int amount;
                 pen.printf("Amount transferred? ");
                 amount = Integer.valueOf(eyes.nextLine().trim()) ;
                 Block minedBlock = blockChain.mine(amount);
                 pen.printf("amount = %s, nonce = %d\n", amount, minedBlock.getNonce());
+                pen.println("Hash for new block: " + minedBlock.getHash());
             } // if input is 'mine'
             
 
@@ -98,7 +101,11 @@ public class BlockChainDriver {
 
 
             if (input.equalsIgnoreCase("remove")) {
-                blockChain.removeLast();
+                if (blockChain.getSize() > 1) {
+                    blockChain.removeLast();
+                } else {
+                    pen.println("Cannot remove. BlockChain size is " + blockChain.getSize());
+                }
             } // if input is 'remove'
 
 
@@ -113,6 +120,10 @@ public class BlockChainDriver {
                 eyes.close();
                 return;
             } // if input is 'quit'
+
+            if (!executedCommand) {
+                pen.printf("'%s' is not a valid command. Type 'help' for a list of commands", input);
+            } // if command not recognized
             } // while (true)
 
     } // main(String[])
