@@ -40,7 +40,7 @@ public class BlockChain {
         }
         // Validate hash of new block
         try {
-            Hash calculatedHash = new Hash(Block.hash(blk, blk.nonce));
+            Hash calculatedHash = new Hash(blk.computeHash(blk.nonce));
             if (!blk.getHash().equals(calculatedHash)) {
                 throw new IllegalArgumentException();
             }
