@@ -1,11 +1,16 @@
 package blockchain;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
+
+/**
+ * Implements main method to run BlockChain.
+ *
+ * @author Arsal Shaikh
+ * @author Vincent Yao
+ */
 
 public class BlockChainDriver {
     public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
@@ -41,20 +46,22 @@ public class BlockChainDriver {
         Scanner eyes = new Scanner(System.in); 
         
         
-        while(true){
+        while (true) {
             pen.println(blockChain);
-            pen.flush();
             pen.printf("Command? ");
+            pen.flush();
             String input = eyes.nextLine().trim();
+
 
             if(input.equalsIgnoreCase("mine")){
                 int amount;
                 pen.printf("Amount transferred? ");
                 amount = Integer.valueOf(eyes.nextLine().trim()) ;
                 Block minedBlock = blockChain.mine(amount);
-                pen.printf("amount = %s, nonce = %d\n",amount, minedBlock.getNonce());
-            }//mine
+                pen.printf("amount = %s, nonce = %d\n", amount, minedBlock.getNonce());
+            } // if input is 'mine'
             
+
             if(input.equalsIgnoreCase("append")){
                 int amount;
                 long nonce;
@@ -73,35 +80,41 @@ public class BlockChainDriver {
                 Block toAppend = new Block(newNum, amount, prevHash, nonce);
 
                 blockChain.append(toAppend);
-            } // if
+            } // if input is 'append'
+
 
             if (input.equalsIgnoreCase("check")) {
                 if (blockChain.isValidBlockChain()) {
                     pen.println("Chain is valid!\n");
                 } else {
-                    pen.println("Chain invalid");
+                    pen.println("Chain invalid\n");
                 }
-            } // if check
+            } // if input is 'check'
+
 
             if (input.equalsIgnoreCase("report")) {
                 blockChain.printBalances(pen);
-            }
+            } // if input is 'report'
+
 
             if (input.equalsIgnoreCase("remove")) {
                 blockChain.removeLast();
-            }
+            } // if input is 'remove'
+
 
             if (input.equalsIgnoreCase("help")) {
                 pen.println(commandList);
-            }
+            } // if input is 'help'
+
 
             // Exit condition
             if (input.equalsIgnoreCase("quit")) {
                 pen.close();
                 eyes.close();
-                break;
-            }
-            }// while
+                return;
+            } // if input is 'quit'
+            } // while (true)
+
     } // main(String[])
 
-}
+} // class BlockChainDrivers

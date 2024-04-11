@@ -102,10 +102,10 @@ public class Block {
 
     //     return md.digest();
 
-    public byte[] computeHash(long nonce) throws NoSuchAlgorithmException {
-        int num = this.num;
-        int amount = this.amount;
-        Hash prevHash = this.getPrevHash();
+    private byte[] computeHash(long nonce) throws NoSuchAlgorithmException {
+        // int num = this.num;
+        // int amount = this.amount;
+        // Hash prevHash = this.getPrevHash();
         
         
         MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -116,17 +116,5 @@ public class Block {
         }
         md.update(ByteBuffer.allocate(Long.BYTES).putLong(nonce).array());
         return md.digest();
-        }
-        
-        // private long mineNonce() throws NoSuchAlgorithmException {
-        //     long nonce = 0;
-        //     do{
-        //     nonce++;
-        //     hash = new Hash(this.computeHash(nonce));
-        //     System.out.println(nonce);
-        //     }while(!hash.isValid());
-
-        //     System.out.println("VALID HASH FOUND");
-        //     return nonce;
-        // }
+    }
 }

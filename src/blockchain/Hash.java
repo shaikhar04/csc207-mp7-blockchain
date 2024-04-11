@@ -27,15 +27,8 @@ public class Hash {
     } // getData()
     
     public boolean isValid() {
-        // for (int i = 0; i < 3; i++) {
-        //     if (this.hashValue[i] != (byte) 0) {
-        //         return false;
-        //     }
-        // }
-        // return true;
         byte[] b = this.hashValue; 
         return b[0] == 0 && b[1] == 0 && b[2] == 0;
-
     } // isValid()
     
     @Override
@@ -55,4 +48,4 @@ public class Hash {
         }
         return false;
     } // equals(Object)
-}
+} // class Hash
