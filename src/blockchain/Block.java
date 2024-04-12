@@ -86,34 +86,20 @@ public class Block {
         return nonce;
     } // mineNonce(Block)
 
-    // public static byte[] hash(Block block, long nonce) throws NoSuchAlgorithmException {
-    //     byte[] numBytes = ByteBuffer.allocate(Integer.BYTES).putInt(block.num).array();
-    //     byte[] amountBytes = ByteBuffer.allocate(Integer.BYTES).putInt(block.amount).array();
-    //     byte[] nonceBytes = ByteBuffer.allocate(Long.BYTES).putLong(block.nonce).array();
-        
-    //     MessageDigest md = MessageDigest.getInstance("SHA-256");
-    //     md.update(numBytes);
-    //     md.update(amountBytes);
-    //     if (block.prevHash != null) {
-    //         md.update(block.prevHash.getData());
-    //     }
-    //     md.update(nonceBytes);
 
-    //     return md.digest();
-
-    private byte[] computeHash(long nonce) throws NoSuchAlgorithmException {
-        // int num = this.num;
-        // int amount = this.amount;
-        // Hash prevHash = this.getPrevHash();
-        
+    private byte[] computeHash(long nonce) throws NoSuchAlgorithmException {        
+        byte[] numBytes = ByteBuffer.allocate(Integer.BYTES).putInt(num).array();
+        byte[] amountBytes = ByteBuffer.allocate(Integer.BYTES).putInt(amount).array();
+        byte[] nonceBytes = ByteBuffer.allocate(Long.BYTES).putLong(nonce).array();
         
         MessageDigest md = MessageDigest.getInstance("SHA-256");
-        md.update(ByteBuffer.allocate(Integer.BYTES).putInt(num).array());
-        md.update(ByteBuffer.allocate(Integer.BYTES).putInt(amount).array());
+        md.update(numBytes);
+        md.update(amountBytes);
         if (prevHash != null) {
             md.update(prevHash.getData());
         }
-        md.update(ByteBuffer.allocate(Long.BYTES).putLong(nonce).array());
+        md.update(nonceBytes);
+
         return md.digest();
     }
 }

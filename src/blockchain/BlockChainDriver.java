@@ -16,13 +16,13 @@ public class BlockChainDriver {
     public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
         String commandList = """
             Valid commands:
-            mine: discovers the nonce for a given transaction
-            append: appends a new block onto the end of the chain
-            remove: removes the last block from the end of the chain
-            check: checks that the block chain is valid
-            report: reports the balances of Alexis and Blake
-            help: prints this list of commands
-            quit: quits the program
+            \t mine: discovers the nonce for a given transaction
+            \t append: appends a new block onto the end of the chain
+            \t remove: removes the last block from the end of the chain
+            \t check: checks that the block chain is valid
+            \t report: reports the balances of Alexis and Blake
+            \t help: prints this list of commands
+            \t quit: quits the program
                 """;
     
         // Validate command line arguments
@@ -93,9 +93,9 @@ public class BlockChainDriver {
             if (input.equalsIgnoreCase("check")) {
                 executedCommand = true;
                 if (blockChain.isValidBlockChain()) {
-                    pen.println("Chain is valid!\n");
+                    pen.printf("Chain is valid!\n");
                 } else {
-                    pen.println("Chain invalid\n");
+                    pen.printf("Chain invalid\n");
                 }
             } // if input is 'check'
 
@@ -108,10 +108,9 @@ public class BlockChainDriver {
 
             if (input.equalsIgnoreCase("remove")) {
                 executedCommand = true;
-                if (blockChain.getSize() > 1) {
-                    blockChain.removeLast();
-                } else {
-                    pen.println("Cannot remove. BlockChain size is " + blockChain.getSize());
+                boolean removedSuccessfully = blockChain.removeLast();
+                if (!removedSuccessfully) {
+                    pen.printf("Cannot remove last block. Only single block remaining\n");
                 }
             } // if input is 'remove'
 
@@ -131,10 +130,9 @@ public class BlockChainDriver {
             } // if input is 'quit'
 
             if (!executedCommand) {
-                pen.printf("'%s' is not a valid command. Type 'help' for a list of commands", input);
+                pen.printf("'%s' is not a valid command. Type 'help' for a list of commands\n", input);
             } // if command not recognized
             } // while (true)
 
     } // main(String[])
-
 } // class BlockChainDrivers

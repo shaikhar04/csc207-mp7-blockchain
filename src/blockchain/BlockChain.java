@@ -3,9 +3,16 @@ package blockchain;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Implements a blockchain as a singly-linked linear structure.
+ *
+ * @author Arsal Shaikh
+ * @author Vincent Yao
+ */
+
 public class BlockChain {
     // -- Fields --
-    private Node first;
+    public Node first;
     public Node last;
     private int size;
 
@@ -14,6 +21,7 @@ public class BlockChain {
     public BlockChain(int initial) throws NoSuchAlgorithmException {
         this.first = new Node(new Block(0, initial, null));
         this.last = this.first;
+        this.size = 1;
     } // BlockChain(int)
 
 
@@ -83,9 +91,9 @@ public class BlockChain {
         return this.last.block.getHash();
     } // getHash()
 
+
     // Checks the validity of the entire blockchain
     public boolean isValidBlockChain() {
-
         int alexBalance = this.first.block.getAmount();
         int blakeBalance = 0;
         
@@ -98,24 +106,24 @@ public class BlockChain {
             alexBalance += walker.block.getAmount();
             blakeBalance -= walker.block.getAmount();
             if (alexBalance < 0 || blakeBalance < 0) {
-                System.out.println("Balance must be > 0"); // DEBUG STATEMENTS
+                System.err.println("Balance must be >= 0");
                 return false;
             }
             // Validate prev hash
             if (!behindWalker.block.getHash().isValid()) {
-                System.out.println("Hash for block number " + behindWalker.block.num + " is invalid."); // DEBUG STATEMENTS
+                System.err.println("Hash for block number " + behindWalker.block.num + " is invalid.");
                 return false;
             }
             // Validate prevHash connects to its predecessor
             if (behindWalker.block.getHash() != walker.block.getPrevHash()) {
-                System.out.println("Hash for Block: " + behindWalker.block.num + " does not equal prevHash for Block " + walker.block.num); // DEBUG STATEMENTS
+                System.err.println("Hash for Block: " + behindWalker.block.num + " does not equal prevHash for Block " + walker.block.num);
                 return false;
             }
         } // while
 
         // Validate hash of last block
         if (!this.last.block.getHash().isValid()) {
-            System.out.println("Hash for last block is invalid"); // DEBUG STATEMENTS
+            System.err.println("Hash for last block is invalid");
             return false;
         }
         return true;
